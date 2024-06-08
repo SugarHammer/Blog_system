@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ops.mapper.Ops_commentMapper">
+
+
+    <select id="PageComment" parameterType="com.example.ops.entity.SelectArticle" resultType="Map">
+        SELECT u.uname,a.title,c.* FROM
+        `comment` AS c,USER AS u,article AS a
+        <where>
+            c.uid=u.id AND c.aid=a.id AND c.deleted=#{deleted}
+            <if test="keyword != null  and keyword != ''"> and c.content LIKE '%${keyword}%'</if>
+            <if test="createtime1 != null and createtime1 !=''">AND UNIX_TIMESTAMP(c.createtime)&gt;= UNIX_TIMESTAMP(#{createtime1}) </if>
+            <if test="createtime2 != null and createtime2 !=''">AND UNIX_TIMESTAMP(c.createtime)&lt;UNIX_TIMESTAMP(#{createtime2})</if>
+            ORDER BY c.createtime DESC
+        </where>
+    </select>
+
+    <select id="PageComment2" parameterType="com.example.ops.entity.SelectArticle" resultType="Map">
+        SELECT u.uname,a.title,c.* FROM
+        (select * from comment where content LIKE '%国家%' or content LIKE '%战争%' or content LIKE '%社会%') AS c,USER AS u,article AS a
+        <where>
+            c.uid=u.id AND c.aid=a.id AND c.deleted=#{deleted}
+            <if test="keyword != null  and keyword != ''"> and c.content LIKE '%${keyword}%'</if>
+            <if test="createtime1 != null and createtime1 !=''">AND UNIX_TIMESTAMP(c.createtime)&gt;= UNIX_TIMESTAMP(#{createtime1}) </if>
+            <if test="createtime2 != null and createtime2 !=''">AND UNIX_TIMESTAMP(c.createtime)&lt;UNIX_TIMESTAMP(#{createtime2})</if>
+            ORDER BY c.createtime DESC
+        </where>
+    </select>
+
+    <update id="commmentDeleted" parameterType="Integer">
+        update comment set deleted=1 where id=#{id}
+    </update>
+
+    <delete id="commmentDelete" parameterType="Integer">
+        delete from `comment` where id=#{id}
+    </delete>
+
+    <update id="commmentstart" parameterType="Integer" >
+        update comment set deleted =0 where id=#{id}
+    </update>
+
+
+</mapper>

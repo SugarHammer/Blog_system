@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<header class="navbar-wrapper" th:fragment="blogHeader">
+    <div class="navbar navbar-fixed-top">
+        <div class="container cl">
+            <a style="font-size: 26px;color: darkgoldenrod;font-family: cursive;" class="navbar-logo hidden-xs" href="">
+<!--                <img class="logo" src="img/logo.png" alt="插画教程" />-->
+                <span class="logo">博客系统网页</span>
+            </a>
+            <a class="logo navbar-logo-m visible-xs" href="/">舆情监控</a>
+            <a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:void(0);" onclick="showSide();">&#xe667;</a>
+            <nav class="nav navbar-nav nav-collapse w_menu" role="navigation">
+                <ul class="cl">
+                    <li class="active"> <a href="index.html" data-hover="首页">首页</a> </li>
+                    <!--<li> <a href="about.html" data-hover="关于我">关于我</a> </li>-->
+                    <li> <a th:href="@{mood.html}" data-hover="碎言碎语">碎言碎语</a> </li>
+                    <li><a href="article.html" data-hover="博客文章">博客文章</a></li>
+                    <li> <a href="board.html" data-hover="留言板">留言板</a> </li>
+                    <li> <a href="http://localhost/index" data-hover="后台" target="_blank">后台</a> </li>
+                    <li th:if="${map.user==null?'false':'true'}"> <a href="/blog/user/exitLogin" data-hover="退出登录">退出登录</a> </li>
+                </ul>
+            </nav>
+            <nav class="navbar-nav navbar-userbar hidden-xs hidden-sm " style="top: 0;">
+                <ul class="cl">
+                    <!--登录-->
+                    <li th:if="${map.user==null?'true':'false'}" class="userInfo dropDown dropDown_hover">
+                        <a href="/user-login" ><img class="avatar radius" src="img/qq.jpg" title="登入">登入</a>
+                    </li>
+                    <!--前往后台-->
+                    <li th:if="${map.user==null?'false':'true'}"  class="userInfo dropDown dropDown_hover">
+                        <a href="admin-index.html" ><img class="avatar radius" th:src="${map.user.img}" title="登入">控制台</a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+
+
+
+<footer class="footer mt-20" th:fragment="blogFooter">
+    <div class="container-fluid" id="foot">
+        <p>Copyright &copy; 2023 www.baidu.com <br>
+            <a href="https://beian.miit.gov.cn" target="_blank">
+                皖ICP备20231212121号</a><br>
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

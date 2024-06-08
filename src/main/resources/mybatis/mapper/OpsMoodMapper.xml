@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ops.mapper.Ops_moodMapper">
+
+
+    <select id="moodList" resultType="Mood">
+        select * from mood order by createtime desc
+    </select>
+
+    <select id="moodOneById" parameterType="Integer" resultType="Mood">
+        select * from mood where id=#{id}
+    </select>
+
+    <insert id="addMood" parameterType="Mood">
+        insert into mood(title,content,createtime)
+        values(#{title},#{content},now())
+    </insert>
+
+    <update id="updateMood" parameterType="Mood">
+        update mood set title=#{title},content=#{content} where id=#{id}
+    </update>
+
+    <delete id="deleteMood" parameterType="Integer">
+        delete from mood where id=#{id}
+    </delete>
+
+</mapper>

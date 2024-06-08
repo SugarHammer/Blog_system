@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.ArticleMapper">
+
+    <select id="queryArticleTogether" resultType="Map">
+        SELECT u.uname,a.*,l.lname FROM
+        USER AS u,article AS a,lable AS l
+        WHERE a.uid=u.id AND a.lid=l.id AND a.deleted=0
+        ORDER BY a.createtime desc
+    </select>
+
+    <select id="queryOneArticleById" parameterType="Integer" resultType="Map">
+        SELECT u.uname,a.*,l.lname FROM
+        USER AS u,article AS a,lable AS l
+        WHERE a.uid=u.id AND a.lid=l.id AND a.id=#{id} AND a.deleted=0
+    </select>
+
+    <select id="getHeatArticle" resultType="Map">
+        SELECT (@i:=@i+1) item,article.id,article.title,article.heat
+        FROM article,(SELECT @i:=0) it
+        WHERE article.deleted=0
+        ORDER BY article.heat DESC LIMIT 0,5
+    </select>
+
+    <select id="getRandomLable4" resultType="Map">
+        SELECT r1.id lid,r1.lname FROM lable AS r1 JOIN
+        (SELECT ROUND(RAND() *
+        (SELECT MAX(id) FROM lable)) AS id) AS r2
+        WHERE r1.id >= r2.id
+        ORDER BY r1.id ASC
+        LIMIT 4
+    </select>
+
+    <select id="PageQueryArticleTogetherByLable" parameterType="Integer" resultType="Map">
+        SELECT u.uname,a.*,l.lname FROM
+                                       USER AS u,article AS a,lable AS l
+        WHERE a.uid=u.id AND a.lid=l.id AND lid =#{id}  AND a.deleted=0
+        ORDER BY a.createtime DESC
+    </select>
+
+    <update id="updateHeatAdd" parameterType="Integer">
+        update article set heat=heat+1 where id=#{id}
+    </update>
+
+
+</mapper>

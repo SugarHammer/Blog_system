@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>碎言碎语</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <LINK rel="Bookmark" href="favicon.ico">
+    <LINK rel="Shortcut Icon" href="favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" th:src="@{/staticRes/js/html5shiv.js}"></script>
+    <script type="text/javascript" th:src="@{/staticRes/js/respond.min.js}"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" th:href="@{plugin/h-ui/css/H-ui.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{plugin/Hui-iconfont/1.0.8/iconfont.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{css/common.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{plugin/pifu/pifu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{css/timeline.css}"/>
+    <!--[if lt IE 9]>
+    <link th:href="@{/staticRes/lib/h-ui/css/H-ui.ie.css}" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    }
+
+    function showSide() {
+        $('.navbar-nav').toggle();
+    }</script>
+</head>
+<body>
+<div th:replace="~{commons/commons::blogHeader}"></div>
+
+<!--导航条-->
+<nav class="breadcrumb">
+    <div class="container"><i class="Hui-iconfont">&#xe67f;</i> <a href="/" class="c-primary">首页</a> <span
+            class="c-gray en">&gt;</span> <span class="c-gray">碎言碎语</span></div>
+</nav>
+
+<section class="container mt-20">
+    <div class="container-fluid">
+        <div class="timeline">
+
+            <div class="cd-timeline-block">
+                <div class="cd-timeline-img cd-picture">
+                    <img src="css/timeline/cd-icon-location.svg" alt="position">
+                </div>
+                <div class="cd-timeline-content">
+                    <h4>火神台庙会</h4>
+                    <p>商丘火神台庙会老照片，画面里有没有属于你的记忆</p>
+                    <video width="320" height="240" controls>
+                        <source src="img/21.mp4" type="video/mp4">
+                    </video>
+                    <!--                    <a href="#" class="f-r"><input class="btn btn-success size-S" type="button"-->
+                    <!--                                                   value="更多"></a>-->
+                    <!--                    <span class="cd-date" th:text="${#dates.format(mood.createtime,'yyyy-MM-dd HH:mm:ss')}"></span>-->
+                </div>
+            </div>
+            <div class="cd-timeline-block">
+                <div class="cd-timeline-img cd-picture">
+                    <img src="css/timeline/cd-icon-location.svg" alt="position">
+                </div>
+                <div class="cd-timeline-content">
+                    <h4>航拍商丘火神台</h4>
+                    <p>航拍商丘火神台汉梁公园</p>
+                    <video width="320" height="240" controls>
+                        <source src="img/22.mp4" type="video/mp4">
+                    </video>
+                    <!--                    <a href="#" class="f-r"><input class="btn btn-success size-S" type="button"-->
+                    <!--                                                   value="更多"></a>-->
+                    <!--                    <span class="cd-date" th:text="${#dates.format(mood.createtime,'yyyy-MM-dd HH:mm:ss')}"></span>-->
+                </div>
+            </div>
+            <div class="cd-timeline-block" th:each="mood:${map.moodList}">
+                <div class="cd-timeline-img cd-picture">
+                    <img src="css/timeline/cd-icon-location.svg" alt="position">
+                </div>
+                <div class="cd-timeline-content">
+                    <h4 th:text="${mood.title}">测试测试</h4>
+                    <p th:text="${mood.content}"></p>
+                    <a href="#" class="f-r"><input class="btn btn-success size-S" type="button"
+                                                                      value="更多"></a>
+                    <span class="cd-date" th:text="${#dates.format(mood.createtime,'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<div th:replace="~{commons/commons::blogFooter}"></div>
+
+<script type="text/javascript" th:src="@{plugin/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{plugin/layer/3.0/layer.js}"></script>
+<script type="text/javascript" th:src="@{plugin/h-ui/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{plugin/pifu/pifu.js}"></script>
+<script type="text/javascript" th:src="@{js/common.js}"></script>
+<script> $(function () {
+    $(window).on("scroll", backToTopFun);
+    backToTopFun();
+}); </script>
+<script>
+    $(function () {
+        //on scolling, show/animate timeline blocks when enter the viewport
+        $(window).on('scroll', function () {
+            $('.cd-timeline-block').each(function () {
+                if ($(this).offset().top <= $(window).scrollTop() + $(window).height() * 0.75 && $(this).find('.cd-timeline-img').hasClass('is-hidden')) {
+                    $(this).find('.cd-timeline-img, .cd-timeline-content').removeClass('is-hidden').addClass('bounce-in');
+                }
+                if ($(window).scrollTop() - $(this).offset().top > 0) {
+                    $(this).find('.cd-timeline-img, .cd-timeline-content').addClass('is-hidden').removeClass('bounce-in');
+                }
+
+            });
+            $('.cd-timeline-block').each(function () {
+                if ($(this).offset().top < $(window).scrollTop() + $(window).height() * 0.75) {
+                    $(this).find('.cd-timeline-img, .cd-timeline-content').removeClass('is-hidden');
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

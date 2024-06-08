@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.admin.mapper.Admin_messageMapper">
+
+    <select id="queryListMessage1" parameterType="com.example.admin.entity.SelectParam" resultType="Map">
+        SELECT u.uname,m.* FROM
+                               message AS m,USER AS u
+        WHERE m.uid=u.id AND m.deleted=0 AND u.id=#{uid}
+    </select>
+
+    <update id="message1Deleted" parameterType="Integer">
+        update message set deleted=1 where id=#{id}
+    </update>
+
+    <update id="message2Deleted" parameterType="Integer">
+        update message2 set deleted=1 where id=#{id}
+    </update>
+
+    <select id="getMessage2" resultType="Map" parameterType="com.example.admin.entity.SelectParam">
+        SELECT u.uname,m1.content content1,m2.* FROM
+        message AS m1,message2 AS m2,USER AS u
+        WHERE m2.mid=m1.id AND m2.uid=u.id AND m2.deleted=0 AND m2.id=#{uid}
+    </select>
+
+
+</mapper>

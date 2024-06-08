@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.admin.mapper.Admin_articleMapper">
+
+    <select id="pageQueryArticleList" resultType="Map" parameterType="com.example.admin.entity.SelectParam">
+        SELECT u.uname,a.*,l.lname FROM
+        USER AS u,article AS a,lable AS l
+        <where>
+            a.uid=u.id AND a.lid=l.id AND a.deleted=#{deleted} and a.uid=#{uid}
+            <if test="keyword != null  and keyword != ''"> and title LIKE '%${keyword}%'</if>
+            <if test="createtime1 != null and createtime1 !=''">AND UNIX_TIMESTAMP(a.createtime)&gt;= UNIX_TIMESTAMP(#{createtime1}) </if>
+            <if test="createtime2 != null and createtime2 !=''">AND UNIX_TIMESTAMP(a.createtime)&lt;UNIX_TIMESTAMP(#{createtime2})</if>
+            ORDER BY a.createtime DESC
+        </where>
+    </select>
+
+    <update id="deleted" parameterType="Integer">
+        update article set deleted = 1 where id=#{id}
+    </update>
+
+    <select id="queryOne" parameterType="Integer" resultType="Map">
+        SELECT u.uname,a.*,l.lname FROM
+                                       USER AS u,article AS a,lable AS l
+        WHERE a.uid=u.id AND a.lid=l.id AND a.deleted=0 AND a.id=#{id}
+    </select>
+
+    <update id="articleUpdate" parameterType="Article">
+        update article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="img != null">img = #{img},</if>
+            title=#{title},lid=#{lid},content=#{content}
+        </trim>
+        where id = #{id}
+    </update>
+
+    <insert id="addArticle" parameterType="Article">
+        insert into article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="img != null">img,</if>
+            uid,title,lid,content,heat,deleted,createtime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="img != null">#{img},</if>
+            #{uid},#{title},#{lid},#{content},0,0,now(),
+        </trim>
+    </insert>
+
+
+
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ops.mapper.Ops_articleMapper">
+
+    <select id="pageQueryArticleList" parameterType="com.example.ops.entity.SelectArticle" resultType="Map">
+        SELECT u.uname,a.*,l.lname FROM
+         USER AS u,article AS a,lable AS l
+        <where>
+            a.uid=u.id AND a.lid=l.id AND a.deleted=#{deleted}
+            <if test="keyword != null  and keyword != ''"> and title LIKE '%${keyword}%'</if>
+            <if test="createtime1 != null and createtime1 !=''">AND UNIX_TIMESTAMP(a.createtime)&gt;= UNIX_TIMESTAMP(#{createtime1}) </if>
+            <if test="createtime2 != null and createtime2 !=''">AND UNIX_TIMESTAMP(a.createtime)&lt;UNIX_TIMESTAMP(#{createtime2})</if>
+             ORDER BY a.createtime DESC
+        </where>
+    </select>
+
+
+    <select id="queryOneById" resultType="Map" parameterType="Integer">
+        SELECT u.uname,a.*,l.lname FROM
+                                       USER AS u,article AS a,lable AS l
+        WHERE a.uid=u.id AND a.lid=l.id
+          AND a.id=#{aid}
+    </select>
+
+    <update id="updateArticle" parameterType="Article">
+        update article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="img != null">img = #{img},</if>
+            title=#{title},lid=#{lid},content=#{content},heat=#{heat}
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteArticle" parameterType="Integer">
+        delete from article where id=#{id}
+    </delete>
+
+    <update id="deletedArticle" parameterType="Integer">
+        update article set deleted=1 where id=#{id}
+    </update>
+
+
+    <update id="startArticle" parameterType="Integer">
+        update article set deleted=0 where id=#{id}
+    </update>
+
+</mapper>

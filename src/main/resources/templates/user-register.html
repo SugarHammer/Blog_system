@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>注册账户</title>
+    <link rel="stylesheet" th:href="@{/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/css/login.css}" />
+</head>
+<body>
+<!-- 粒子背景 -->
+<div id="particles-js"></div>
+<!-- 登录表单 -->
+<form action="/blog/user/register" class="layui-form login-form layui-panel" autocomplete="off">
+    <h1 onclick="location.href='/index'" class="login-title">
+<!--        <img style="height: 30px" th:src="@{img/logo.png}" alt="logo"/>-->
+        <span>博客系统注册账户</span>
+    </h1>
+    <p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+    <!-- 用户名 -->
+    <div class="layui-form-item">
+        <i class="layui-icon layui-icon-username"></i>
+        <input name="uname" type="text" placeholder="请输入用户名" class="layui-input" lay-verify="required"
+               lay-reqText="请输入用户名"/>
+    </div>
+    <!-- phone -->
+    <div class="layui-form-item">
+        <i class="layui-icon">&#xe611;</i>
+        <input name="phone" type="number" placeholder="请输入手机号" class="layui-input" lay-verify="required"/>
+    </div>
+
+    <!-- newPWD -->
+    <div class="layui-form-item">
+        <i class="layui-icon layui-icon-password"></i>
+        <input name="pwd" type="password" placeholder="请输入密码" class="layui-input" lay-verify="required"/>
+    </div>
+
+    <!-- email -->
+    <div class="layui-form-item">
+        <i class="layui-icon">&#xe611;</i>
+        <input name="email" type="email" placeholder="请输入绑定的邮箱" class="layui-input" lay-verify="required"/>
+    </div>
+
+    <!-- 验证码 -->
+    <!--<div class="layui-form-item">
+        <div class="layui-col-xs7">
+            <i class="layui-icon">&#xe610;</i>
+            <input id="authcode" type="text" placeholder="请输入验证码" class="layui-input" lay-verify="required"/>
+        </div>
+        <div class="layui-col-xs5" >
+            <input style="text-align: center" type="button" value="发送验证码" onclick="sendyzm()" class="layui-btn layui-btn-normal layui-btn-fluid">
+        </div>
+    </div>-->
+
+    <div class="layui-form-item">
+        <i class="layui-icon layui-icon-vercode"></i>
+        <input type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="required" lay-reqText="请输入验证码" />
+        <img onclick="changeValidateCode(this)" id="captcha" src="/randoms" alt="验证码生成失败！" />
+    </div>
+
+
+    <div class="layui-form-item">
+        <input type="submit" value="注册" class="layui-btn layui-btn-normal layui-btn-fluid">
+    </div>
+    <div class="layui-form-item">
+        <input type="button" value="登录" onclick="location.href='/user-login'" class="layui-btn layui-btn-normal layui-btn-fluid">
+    </div>
+</form>
+<script th:src="@{/js/layui.js}"></script>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/particles.js}"></script>
+<script>
+    //验证码
+    function changeValidateCode(obj) {
+        //获取当前的时间作为参数，读取时就不会读取缓存中的内容
+        var timenow = new Date().getTime();
+        //每次请求需要一个不同的参数，否则可能会返回同样的验证码
+        //这和浏览器的缓存机制有关系，也可以把页面设置为不缓存，这样就不用这个参数了。
+        obj.src="../randoms?d="+timenow;
+    }
+
+
+    /*function replacement(){
+        var newpwd = $("#newpwd").val();
+        var authcode = $("#authcode").val();
+        $.ajax({
+            url:"../userServlet?type=6",
+            type:"post",
+            dataType:"json",
+            data:{"newpwd":newpwd,"authcode":authcode},
+            success:function (data){
+                alert(data.msg);
+                if (data.code==200){
+                    location.href="login.html";
+                }
+            }
+        });
+    }
+
+    //发送验证码
+    function sendyzm() {
+        var unama = $("#uname").val();
+        var email = $("#email").val();
+        $.ajax({
+            url:"../userServlet?type=7",
+            type:"post",
+            dataType:"json",
+            data:{"uname":unama,"email":email},
+            success:function (data){
+                alert(data.msg);
+            }
+        });
+
+    }*/
+</script>
+</body>
+</html>

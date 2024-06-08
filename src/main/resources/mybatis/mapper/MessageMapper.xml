@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.MessageMapper">
+
+    <select id="queryMessageAll" resultType="Map">
+        SELECT m.*,u.uname,u.img FROM
+                                     message AS m,`user` AS u
+        WHERE m.uid=u.id AND m.deleted=0 AND m.deleted=0
+        ORDER BY m.createtime desc
+    </select>
+
+    <select id="queryMessage2" parameterType="Integer" resultType="Map">
+        SELECT m2.*,u.uname,u.img FROM
+                                message2 AS m2,`user` AS u
+        WHERE m2.uid=u.id AND m2.deleted=0 AND m2.mid=#{mid}
+    </select>
+
+    <insert id="addMessage1" parameterType="Message">
+        insert into message(uid,content,deleted,createtime)
+        values (#{uid},#{content},0,now())
+    </insert>
+
+    <insert id="addMessage2" parameterType="Message2">
+        insert into message2(uid,mid,content,deleted,createtime)
+        values (#{uid},#{mid},#{content},0,now())
+    </insert>
+
+</mapper>

@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>博客文章</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <LINK rel="Bookmark" href="favicon.ico">
+    <LINK rel="Shortcut Icon" href="favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" th:src="@{/staticRes/js/html5shiv.js}"></script>
+    <script type="text/javascript" th:src="@{/staticRes/js/respond.min.js}"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" th:href="@{plugin/h-ui/css/H-ui.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{plugin/Hui-iconfont/1.0.8/iconfont.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{css/common.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{plugin/pifu/pifu.css}"/>
+    <!--[if lt IE 9]>
+    <link th:href="@{/staticRes/lib/h-ui/css/H-ui.ie.css}" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    }
+
+    function showSide() {
+        $('.navbar-nav').toggle();
+    }</script>
+</head>
+<body>
+<div th:replace="~{commons/commons::blogHeader}"></div>
+
+<!--导航条-->
+<nav class="breadcrumb">
+    <div class="container">
+        <i class="Hui-iconfont">&#xe67f;</i><a href="/" class="c-primary">首页</a>
+        <span class="c-gray en">&gt;</span><i class="Hui-iconfont">&#xe64b;</i> <a href="/article" class="c-primary">博客文章</a>
+    </div>
+</nav>
+
+<section class="container">
+    <!--left-->
+    <div class="col-sm-9 col-md-9 mt-20">
+
+        <!--article list-->
+        <ul class="index_arc">
+            <!--循环article列表-->
+            <li class="index_arc_item" th:each="list:${map.articleList.list}">
+                <a th:href="@{/article_detail(articleId=${list.id})}" class="pic">
+                    <img class="lazyload" th:data-original="${list.img}" alt="应该选"/>
+                </a>
+                <h4 class="title"><a th:href="@{/article_detail(articleId=${list.id})}"><span
+                        th:text="${list.title}"></span></a></h4>
+                <div class="date_hits">
+                    <span th:text="${list.uname}">老王</span>
+                    <span th:text="${#dates.format(list.createtime,'yyyy-MM-dd HH:mm:ss')}"></span>
+                    <span><a th:href="@{/article(lableId=${list.lid})}"><span th:text="${list.lname}"></span></a></span>
+                    <p class="hits"><i class="Hui-iconfont" title="点击量">&#xe6c1;</i><span
+                            th:text="${list.heat}"></span></p>
+                </div>
+                <div class="desc"><span th:text="${list.content}"></span></div>
+            </li>
+        </ul>
+        <div class="text-c mb-20" id="moreBlog">
+            <div th:if="${map.articleList.hasPreviousPage}" class="col-sm-2 col-md-2"><a class="btn  radius btn-block "
+                                                                                         th:href="@{/index(pageNum=${map.articleList.pageNum}-1,pageSize=${map.articleList.pageSize})}">上一页</a>
+            </div>
+            <div class="col-sm-2 col-md-2">第<span th:text="${map.articleList.pageNum}"></span>页 共<span
+                    th:text="${map.articleList.pages}"></span>页
+            </div>
+            <div th:if="${map.articleList.hasNextPage}" class="col-sm-2 col-md-2"><a class="btn  radius btn-block "
+                                                                                     th:href="@{/index(pageNum=${map.articleList.pageNum}+1,pageSize=${map.articleList.pageSize})}">下一页</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!--right-->
+    <div class="col-sm-3 col-md-3 mt-20">
+        <!--导航-->
+        <div class="panel panel-primary mb-20">
+            <div class="panel-body">
+                <a th:each="lable:${map.lableList}" th:text="${lable.lname}" th:href="@{/article(lableId=${lable.lid})}"
+                   class="btn btn-primary-outline radius nav-btn"></a>
+            </div>
+        </div>
+
+        <!--热门推荐-->
+        <div class="bg-fff box-shadow radius mb-20">
+            <div class="tab-category">
+                <a href=""><strong>热门推荐</strong></a>
+            </div>
+            <div class="tab-category-item">
+                <ul class="index_recd clickTop">
+                    <li th:each="heatArticle:${map.heatArticle}">
+                        <a th:href="@{/article_detail(articleId=${heatArticle.id})}"><span
+                                th:text="${heatArticle.title}"></span></a>
+                        <p class="hits"><i class="Hui-iconfont" title="点击量">&#xe6c1;</i> <span
+                                th:text="${heatArticle.heat}"></span></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--图片-->
+        <div class="bg-fff box-shadow radius mb-20">
+            <div class="tab-category">
+                <a href=""><strong>广告招租</strong></a>
+            </div>
+            <div class="tab-category-item">
+                <img th:src="@{img/12.jpg}" class="img-responsive lazyload" alt="响应式图片">
+            </div>
+        </div>
+
+        <!--标签-->
+        <div class="bg-fff box-shadow radius mb-20">
+            <div class="tab-category">
+                <a href=""><strong>标签云</strong></a>
+            </div>
+            <div class="tab-category-item">
+                <div class="tags"><a href="https://www.zhihu.com/question/323404884">财经</a> <a
+                        href="http://www.h-ui.net/websafecolors.shtml">体育</a> <a
+                        href="https://passport.weibo.com/">教育</a> <a
+                        href="https://www.zhihu.com/topic/20035539/intro">时尚</a> <a
+                        href="http://www.h-ui.net/bug.shtml">数智</a> <a
+                        href="http://www.h-ui.net/site.shtml">阅读</a> <a
+                        href="http://www.h-ui.net/icon/index.shtml">健康</a> <a
+                        href="http://www.h-ui.net/tools/jsformat.shtml">原创</a> <a
+                        href="http://www.h-ui.net/bg/index.shtml">文旅</a>
+                </div>
+        </div>
+    </div>
+
+</section>
+
+<div th:replace="~{commons/commons::blogFooter}"></div>
+
+<script type="text/javascript" th:src="@{plugin/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{plugin/layer/3.0/layer.js}"></script>
+<script type="text/javascript" th:src="@{plugin/h-ui/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{plugin/pifu/pifu.js}"></script>
+<script type="text/javascript" th:src="@{js/common.js}"></script>
+<script> $(function () {
+    $(window).on("scroll", backToTopFun);
+    backToTopFun();
+}); </script>
+<script>
+    $(function () {
+//标签
+        $(".tags a").each(function () {
+            var x = 9;
+            var y = 0;
+            var rand = parseInt(Math.random() * (x - y + 1) + y);
+            $(this).addClass("tags" + rand)
+        });
+
+        $("img.lazyload").lazyload({failurelimit: 3});
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ops.mapper.Ops_userMapper">
+
+    <select id="PageUserList" parameterType="com.example.ops.entity.SelectArticle" resultType="User">
+        select * from user
+        <where>
+            deleted=#{deleted}
+            <if test="keyword != null  and keyword != ''"> and uname LIKE '%${keyword}%'</if>
+            <if test="createtime1 != null and createtime1 !=''">AND UNIX_TIMESTAMP(createtime)&gt;= UNIX_TIMESTAMP(#{createtime1}) </if>
+            <if test="createtime2 != null and createtime2 !=''">AND UNIX_TIMESTAMP(createtime)&lt;UNIX_TIMESTAMP(#{createtime2})</if>
+            ORDER BY createtime DESC
+        </where>
+    </select>
+
+    <insert id="addUser" parameterType="User">
+            insert into user
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="uname != null">uname,</if>
+                <if test="phone != null">phone,</if>
+                <if test="pwd != null">pwd,</if>
+                <if test="img != null">img,</if>
+                <if test="email != null">email,</if>
+                <if test="address != null">address,</if>
+                <if test="profession != null">profession,</if>
+                deleted,createtime,
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="uname != null">#{uname},</if>
+                <if test="phone != null">#{phone},</if>
+                <if test="pwd != null">#{pwd},</if>
+                <if test="img != null">#{img},</if>
+                <if test="email != null">#{email},</if>
+                <if test="address != null">#{address},</if>
+                <if test="profession != null">#{profession},</if>
+                0,now(),
+            </trim>
+    </insert>
+
+    <select id="queryOneById" parameterType="Integer" resultType="User">
+        select * from user where id=#{id}
+    </select>
+
+    <update id="updateUser" parameterType="User">
+            update user
+            <trim prefix="SET" suffixOverrides=",">
+                uname=#{uname},phone=#{phone},pwd=#{pwd},email=#{email},address=#{address},profession=#{profession},
+                <if test="img != null">img = #{img},</if>
+            </trim>
+            where id = #{id}
+    </update>
+
+    <update id="updateDeleted" parameterType="Integer">
+        update user set deleted=1 where id=#{id}
+    </update>
+
+    <delete id="updateDelete" parameterType="Integer">
+        delete from user where id=#{id}
+    </delete>
+
+    <update id="startUser" parameterType="Integer">
+        update user set deleted=0 where id=#{id}
+    </update>
+
+</mapper>
